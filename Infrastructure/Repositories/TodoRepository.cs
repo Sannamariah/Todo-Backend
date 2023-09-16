@@ -1,4 +1,6 @@
-﻿namespace Infrastructure.Repositories;
+﻿using Entity;
+
+namespace Infrastructure.Repositories;
 
 public class TodoRepository : ITodoRepository
 {
@@ -9,4 +11,18 @@ public class TodoRepository : ITodoRepository
         _context = context;
     }
 
+    public async Task<Todo> AddTodo(Todo todo)
+    {
+        _context.Todos.Add(todo);
+        await _context.SaveChangesAsync();
+
+        return todo;
+    }
+
+    public async Task<Todo> GetTodo(int id)
+    {
+        return await _context.Todos.FindAsync(id);
+    }
+
+  
 }

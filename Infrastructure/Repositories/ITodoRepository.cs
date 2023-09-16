@@ -1,15 +1,11 @@
 ﻿using Entity;
-using SQLitePCL;
 
 namespace Infrastructure.Repositories
 {
     public interface ITodoRepository
     {
-
-        //public TodoRepository(TodoContext context)
-        //{
-        //   _context = context;
-        //}
-
+        Task<Todo> AddTodo(Todo todo);
+        Task<Todo> GetTodo(int id);
+        
     }
 }

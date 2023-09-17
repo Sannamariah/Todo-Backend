@@ -1,4 +1,6 @@
-﻿using Entity;
+﻿using Api.Dtos;
+using AutoMapper;
+using Entity;
 using Infrastructure.Repositories;
 using Microsoft.AspNetCore.Mvc;
 
@@ -9,21 +11,25 @@ namespace Api.Controllers
     public class TodosController : ControllerBase
     {
         private readonly ITodoRepository _todoRepository;
+        private readonly IMapper _mapper;
 
-        public TodosController(ITodoRepository todoRepository)
+        public TodosController(ITodoRepository todoRepository, 
+            IMapper mapper)
         {
             _todoRepository = todoRepository;
+            _mapper = mapper;
         }
 
         [HttpGet]
-        public async Task<ActionResult<Todo>> GetTodo(int id)
+        public async Task<ActionResult<TodoDto>> GetTodo(int id)
         {
             var todo = await _todoRepository.GetTodo(id);
             if (todo == null) 
             {
                 return NotFound();
             }
-            return todo;
+            var todoDto = _mapper.Map<TodoDto>(todo);
+            return todoDto;
         }
 
         [HttpPost]

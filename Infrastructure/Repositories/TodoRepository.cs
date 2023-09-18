@@ -1,4 +1,5 @@
 ﻿using Entity;
+using Microsoft.EntityFrameworkCore;
 
 namespace Infrastructure.Repositories;
 
@@ -24,5 +25,8 @@ public class TodoRepository : ITodoRepository
         return await _context.Todos.FindAsync(id);
     }
 
-  
+    public Task<List<Todo>> GetTodos()
+    {
+       return _context.Todos.ToListAsync();
+    }
 }

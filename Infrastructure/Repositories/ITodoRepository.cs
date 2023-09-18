@@ -6,6 +6,6 @@ namespace Infrastructure.Repositories
     {
         Task<Todo> AddTodo(Todo todo);
         Task<Todo> GetTodo(int id);
-        
+        Task<List<Todo>> GetTodos();
     }
 }

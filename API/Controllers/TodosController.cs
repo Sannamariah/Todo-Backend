@@ -44,7 +44,7 @@ namespace Api.Controllers
         public async Task<ActionResult<Todo>> PostTodo(Todo todo)
         {
             var createdTodo = await _todoRepository.AddTodo(todo);
-            return CreatedAtAction("GetTodo", routeValues: new { id = createdTodo.Id, }, value: createdTodo);
+            return CreatedAtAction("GetTodo", routeValues: new { id = createdTodo.Id, }, createdTodo);
         }
     }
 }

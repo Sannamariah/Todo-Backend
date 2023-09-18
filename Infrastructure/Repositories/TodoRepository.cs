@@ -27,6 +27,9 @@ public class TodoRepository : ITodoRepository
 
     public Task<List<Todo>> GetTodos()
     {
-       return _context.Todos.ToListAsync();
+       return _context.Todos
+            .OrderBy(x => x.Id)
+            .Take(25)
+            .ToListAsync();
     }
 }

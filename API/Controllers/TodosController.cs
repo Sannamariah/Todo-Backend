@@ -12,16 +12,20 @@ namespace Api.Controllers
     {
         private readonly ITodoRepository _todoRepository;
         private readonly IMapper _mapper;
+        private readonly ILogger<TodosController> _logger;
 
-        public TodosController(ITodoRepository todoRepository,
-            IMapper mapper)
+        public TodosController(
+            ITodoRepository todoRepository,
+            IMapper mapper,
+            ILogger<TodosController> logger)
         {
             _todoRepository = todoRepository;
             _mapper = mapper;
+            _logger = logger;
         }
 
         [HttpGet]
-        public async Task<ActionResult<List<Todo>>> GetTodos()
+        public async Task<ActionResult<List<TodoDto>>> GetTodos()
         {
             var todos = await _todoRepository.GetTodos();
             var todosDto = _mapper.Map<List<TodoDto>>(todos);
@@ -41,10 +45,43 @@ namespace Api.Controllers
         }
 
         [HttpPost]
-        public async Task<ActionResult<Todo>> PostTodo(Todo todo)
+        public async Task<ActionResult<TodoDto>> PostTodo(Todo todo)
         {
             var createdTodo = await _todoRepository.AddTodo(todo);
-            return CreatedAtAction("GetTodo", routeValues: new { id = createdTodo.Id, }, createdTodo);
+            return CreatedAtAction("GetTodo", new { id = createdTodo.Id }, createdTodo);
+        }
+
+        [HttpPut("{id}")]
+        public async Task<ActionResult<TodoDto>> PutTodo(int id, Todo todo)
+        {
+            var updatedTodo = await _todoRepository.UpdateTodo(id, todo);
+            if (updatedTodo == null) 
+            {
+                return BadRequest();
+            }
+            var todoDto = _mapper.Map<TodoDto>(updatedTodo);
+            return Ok(todoDto);
+        }
+
+        [HttpDelete("id")]
+        public async Task<IActionResult> DeleteTodo(int id)
+        {
+            try
+            {
+                var todo = await _todoRepository.DeleteTodoById(id);
+                if (todo == null)
+                {
+                    _logger.LogWarning("Todo with id {id} not found", id);
+                    return NotFound();
+                }
+                _logger.LogInformation(message: "Todo with id {id} was deleted", id);
+                return NoContent();
+            }
+            catch (Exception)
+            {
+                _logger.LogError(message: "Error while trying to delete todo with id {id}", id);
+                return StatusCode(500, "Internal Server Error");
+            }
         }
     }
 }

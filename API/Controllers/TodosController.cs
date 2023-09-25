@@ -63,7 +63,7 @@ namespace Api.Controllers
             return Ok(todoDto);
         }
 
-        [HttpDelete("id")]
+        [HttpDelete("{id}")]
         public async Task<IActionResult> DeleteTodo(int id)
         {
             try

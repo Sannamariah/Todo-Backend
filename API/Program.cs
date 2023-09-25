@@ -37,6 +37,7 @@ builder.Services.AddDbContext<TodoContext>(opt =>
 builder.Services.AddScoped<ITodoRepository, TodoRepository>();
 builder.Services.AddAutoMapper(typeof(MappingProfiles));
 
+
 var app = builder.Build();
 
 // Configure the HTTP request pipeline.

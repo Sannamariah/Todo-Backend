@@ -22,11 +22,16 @@ public class TodoRepository : ITodoRepository
 
     public async Task<Todo> GetTodo(int id)
     {
+        if (id == 0) 
+        {
+            return null;
+        }
         return await _context.Todos.FindAsync(id);
     }
 
     public Task<List<Todo>> GetTodos()
     {
+       
         return _context.Todos
              .OrderBy(x => x.Id)
              .Take(25)

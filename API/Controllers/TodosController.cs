@@ -28,6 +28,10 @@ namespace Api.Controllers
         public async Task<ActionResult<List<TodoDto>>> GetTodos()
         {
             var todos = await _todoRepository.GetTodos();
+            if (todos == null) 
+            {
+                return NotFound();
+            }
             var todosDto = _mapper.Map<List<TodoDto>>(todos);
             return Ok(todosDto);
         }
